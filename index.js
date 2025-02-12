@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // ✅ API route to fetch the URL
 app.get('/get-url', async (req, res) => {
     try {
-        const urlData = { url: "https://example.com" }; // Replace with MongoDB data if needed
+        const urlData = { url: "https://google.com" }; // Replace with MongoDB data if needed
         res.json(urlData);
     } catch (error) {
         res.status(500).json({ error: "Server Error" });
