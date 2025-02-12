@@ -1,11 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // ✅ Import CORS
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
+// ✅ Enable CORS for all requests
+app.use(cors());
+
+// ✅ (Optional) Allow specific origins only
+// app.use(cors({ origin: "https://your-frontend.netlify.app" }));
+
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -13,24 +19,14 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ MongoDB Connected'))
 .catch(err => console.log('❌ MongoDB Connection Error:', err));
 
-// Define the schema
-const UrlSchema = new mongoose.Schema({ url: String });
-const Url = mongoose.model('Url', UrlSchema);
-
-// ✅ API to fetch URL from MongoDB
-app.get('/geturl', async (req, res) => {
+// ✅ API route to fetch the URL
+app.get('/get-url', async (req, res) => {
     try {
-        const data = await Url.findOne(); // Get first document
-        if (data) {
-            res.json({ url: data.url });
-        } else {
-            res.status(404).json({ error: 'URL not found' });
-        }
-    } catch (err) {
-        console.error('❌ Error fetching URL:', err);
-        res.status(500).json({ error: 'Server error' });
+        const urlData = { url: "https://example.com" }; // Replace with MongoDB data if needed
+        res.json(urlData);
+    } catch (error) {
+        res.status(500).json({ error: "Server Error" });
     }
 });
 
-// Start server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
